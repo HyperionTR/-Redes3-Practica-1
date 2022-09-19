@@ -3,9 +3,16 @@ from shutil import ExecError
 import subprocess
 from snmp import *
 from typing import Dict, List
+import os
 
+# Directorio de hosts guardados
+hostDir = os.path.dirname( os.path.abspath(__file__) )
+
+# INI config parser
 cfgParser = cfp.ConfigParser()
-cfgParser.read("hosts.ini")
+# Leer por primera vez los host
+cfgParser.read(f"{hostDir}/hosts.ini")
+
 def nuevoHost( comunidad: str, ip: str, puerto: int, version: int ):
 	
 	# Verificamos que el host no esté ya registrado
@@ -32,24 +39,29 @@ def nuevoHost( comunidad: str, ip: str, puerto: int, version: int ):
 			"Version": version
 		}
 
+		# Creamos el archivo de configuración si no existe
 		try:
-			hosts = open("hosts.ini", "w")
+			hosts = open(f"{hostDir}/hosts.ini", "w")
 		except:
-			hosts = open("hosts.ini", "x")
+			hosts = open(f"{hostDir}/hosts.ini", "x")
+		# Y guardamos elhost neuvo
 		cfgParser.write(hosts)
 		hosts.close()
 	except Exception as e:
 		print(f"\n\x1b[91;1mProblema de conexión con el host...\n└─ {e}\x1b[0m")
 
+# Retorna la lista de hosts registrados
 def leerHosts() -> List[str]:
-	cfgParser.read("hosts.ini")
+	cfgParser.read(f"{hostDir}/hosts.ini")
 	return cfgParser.sections()
 
+# Elimina un solo host registrado
 def eliminarHost( hostname: str ):
 	cfgParser.remove_section(hostname)
-	with open("hosts.ini", "w") as h:
+	with open(f"{hostDir}/hosts.ini", "w") as h:
 		cfgParser.write(h)
 
+# Recibe la cadena sysDescr de una consula SNMP y retorna una cadena indicando el SO
 def soHost( sysDescr: str ) -> str:
 	lowerDesc = sysDescr.lower()
 	if "ubuntu" in lowerDesc:
@@ -102,6 +114,7 @@ def interfacesHost( hostname: str, ifNumber: int ) -> Dict[str, str]:
 		
 	return interfaces;
 
+# Muestra y retorna la lista de hosts
 def mostrarHosts() -> List[str]:
 	
 	hosts = leerHosts()

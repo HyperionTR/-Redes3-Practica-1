@@ -1,5 +1,7 @@
+import imghdr
 from fpdf import *
 from host_control import *
+import os
 
 UBUNTU_ORANGE = (210, 68, 19)
 WINDOWS10_BLUE = (18, 176, 233)
@@ -42,7 +44,8 @@ class ReportGenerator(FPDF):
 		self.set_line_width(3)
 		self.set_fill_color(0, 0, 0)
 
-		self.image(f"Admin de servicios en red/New Practica 1/{hostOS.lower()}.png", 20, 15, 70)
+		folder = os.path.dirname(os.path.abspath(__file__))
+		self.image(f"{folder}/images/{hostOS.lower()}.png", 20, 15, 70)
 
 		self.text( 95, 20+5, "Sistema operativo")
 		
@@ -104,4 +107,4 @@ class ReportGenerator(FPDF):
 			self.line( 30, ifline + 8, 175,ifline + 8)
 			ifline += 20
 
-		self.output(f"reporte_{hostname}.pdf")
+		self.output(f"{folder}/report/reporte_{hostname}.pdf")

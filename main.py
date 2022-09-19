@@ -29,11 +29,14 @@ def main():
 				print(e)	
 		elif act == '1':
 			print("Ingresa los datos del host... ")
-			com = input("Comunidad\n> ")
-			ip = input("IP Local\n> ")
-			pu = input("Puerto\n> ")
-			ver = input("Version\n> ")
-			nuevoHost( com, ip, int(pu), int(ver) )
+			try:
+				com = input("Comunidad\n> ")
+				ip = input("IP Local\n> ")
+				pu = input("Puerto\n> ")
+				ver = input("Version\n> ")
+				nuevoHost( com, ip, int(pu), int(ver) )
+			except:
+				print("\n\x1b[93;1mUno de los datos ingresados, es inválido\x1b[0m")
 		elif act == '2':
 			try:
 				hosts = mostrarHosts()	
@@ -44,7 +47,7 @@ def main():
 				try:
 					eliminarHost(hosts[int(el)])
 				except IndexError:
-					print(f"\n\x1b[91mEl host {el} no existe\x1b[0m")
+					print(f"\n\x1b[91;1mEl host {el} no existe\x1b[0m")
 		elif act == '3':
 			try:
 				hosts = mostrarHosts()	
@@ -56,7 +59,7 @@ def main():
 					pdf = ReportGenerator()
 					pdf.reporte( hosts[int(el)] )
 				except IndexError:
-					print(f"\n\x1b[91mEl host {el} no existe\x1b[0m")
+					print(f"\n\x1b[91;1mEl host {el} no existe\x1b[0m")
 				finally:
 					del pdf
 		else:
