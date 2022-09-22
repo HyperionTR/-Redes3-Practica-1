@@ -120,10 +120,10 @@ def mostrarHosts() -> List[str]:
 	hosts = leerHosts()
 
 	if len(hosts) == 0:
-		raise Exception("\x1b[93;1m¡No hay hosts registrados!\x1b[0m")
-	
-	print(f"\x1b[1mHosts actualmente registrados: \x1b[0m")
-	for i, h in enumerate(hosts):
-		print(f"{i} -> {h}")
+		return hosts
+	else:	
+		print(f"\x1b[1mHosts actualmente registrados: \x1b[0m")
+		for i, h in enumerate(hosts):
+			print(f"{i} -> {h}")
 	
 	return hosts

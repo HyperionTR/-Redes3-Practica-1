@@ -23,10 +23,8 @@ def main():
 		print("-*-*-*-*-*- -*-*-*-*-*-*-*-+-+- -*-*-*-*-*-\n")
 
 		if act == '0':
-			try:
-				mostrarHosts()	
-			except Exception as e:
-				print(e)	
+			if len(mostrarHosts()) == 0:
+				print("\x1b[93;1m¡No hay hosts registrados!\x1b[0m")
 		elif act == '1':
 			print("Ingresa los datos del host... ")
 			try:
@@ -38,22 +36,20 @@ def main():
 			except:
 				print("\n\x1b[93;1mUno de los datos ingresados, es inválido\x1b[0m")
 		elif act == '2':
-			try:
-				hosts = mostrarHosts()	
-			except Exception as e:	
-				print(e)	
-			else:
+			hosts = mostrarHosts()	
+			
+			if len(hosts) != 0 :
 				el = input("\nEscribe el indice del host a eliminar\n> ")
 				try:
 					eliminarHost(hosts[int(el)])
 				except IndexError:
 					print(f"\n\x1b[91;1mEl host {el} no existe\x1b[0m")
+			else :
+				print("\x1b[93;1m¡No hay hosts registrados!\x1b[0m")
 		elif act == '3':
-			try:
-				hosts = mostrarHosts()	
-			except Exception as e:
-				print(e)	
-			else:
+			hosts = mostrarHosts()	
+			
+			if len(hosts) != 0 :
 				el = input("\nEscribe el índice del host para generar su reporte\n> ")
 				try:
 					pdf = ReportGenerator()
@@ -62,6 +58,8 @@ def main():
 					print(f"\n\x1b[91;1mEl host {el} no existe\x1b[0m")
 				finally:
 					del pdf
+			else :
+				print("\x1b[93;1m¡No hay hosts registrados!\x1b[0m")
 		else:
 			print("\x1b[94;1;7m¡Hasta luego!\x1b[0m")
 		print("\n-*-*-*-*-*- -*-*-*-*-*-*-*-+-+- -*-*-*-*-*-")
