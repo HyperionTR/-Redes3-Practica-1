@@ -2,6 +2,8 @@ import imghdr
 from fpdf import *
 from host_control import *
 import os
+import datetime as date
+import pytz
 
 UBUNTU_ORANGE = (210, 68, 19)
 WINDOWS10_BLUE = (18, 176, 233)
@@ -32,6 +34,14 @@ class ReportGenerator(FPDF):
 		hostIf = interfacesHost( hostname, 7 )
 		hostOS = soHost( host[2] )
 
+		# Obtenemos los datos de la fecha actual
+		# print('\n'.join(pytz.country_timezones['mx']))
+		t = date.datetime.now(pytz.timezone("America/Mexico_City"))
+		timestamp = f"{t.year}_{t.month}_{t.day}__{t.hour}_{t.minute}_{t.second}"
+		readable_timestamp = f"el_{t.day}_del_{t.month}_de_{t.year}_a_las_{t.hour}_{t.minute}_{t.second}"
+		printable_timestamp = f"Reporte hecho el {t.day} del {t.month} de {t.year} a las {t.hour}:{t.minute}:{t.second}"
+
+
 		# Definimos el color del texto
 		txtColor =  UBUNTU_ORANGE if hostOS == "Ubuntu" else\
 					WINDOWS10_BLUE if hostOS == "Windows10" else\
@@ -43,6 +53,9 @@ class ReportGenerator(FPDF):
 
 		self.set_line_width(3)
 		self.set_fill_color(0, 0, 0)
+
+		# Mostramos la fecha
+		self.text(40, 10, printable_timestamp)
 
 		folder = os.path.dirname(os.path.abspath(__file__))
 		self.image(f"{folder}/images/{hostOS.lower()}.png", 20, 15, 70)
@@ -107,4 +120,4 @@ class ReportGenerator(FPDF):
 			self.line( 30, ifline + 8, 175,ifline + 8)
 			ifline += 20
 
-		self.output(f"{folder}/report/reporte_{hostname}.pdf")
+		self.output(f"{folder}/report/reporte_{hostname}_{readable_timestamp}.pdf")
