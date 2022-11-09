@@ -14,9 +14,9 @@ IF_DESCR_OID = "1.3.6.1.2.1.2.2.1.2"
 IF_ADMSTAT_OID = "1.3.6.1.2.1.2.2.1.7"
 # Accounting Management OID's
 # Unicast recieved PACKETS
-UNICAST_RECEIVED_OID = "1.3.6.1.2.1.2.2.1.11.1" # Tabular
+UNICAST_IF_RECEIVED_OID = "1.3.6.1.2.1.2.2.1.11" # Tabular
 # IP Receuved datagrams
-IP_IF_RECV_OID = "1.3.6.1.2.1.4.31.3.1.3.2.1" # Tabular
+IP_IF_RECV_OID = "1.3.6.1.2.1.4.31.3.1.3.2" # Tabular
 # ICMP Echo messages
 ICMP_OUT_ECHOS_OID = "1.3.6.1.2.1.5.21.0"
 # TCP input segments

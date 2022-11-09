@@ -79,6 +79,10 @@ def soHost( sysDescr: str ) -> str:
 def logoHost( osName: str ) -> str:
 	return subprocess.run( ["neofetch", "-L", "--ascii_distro", osName], stdout=subprocess.PIPE ).stdout.decode("ASCII")
 
+def numeroInterfaces( hostname: str ) -> int:
+	"""Devuelve la cantidad de interfaces que tiene un determinado host"""
+	return int( consultaSNMP( cfgParser[hostname]["comunidad"], cfgParser[hostname]["ip"], IF_NUMBER_OID ) )
+
 # Retorna el nombre de cada interfáz, junto a su estado administrativo
 def interfacesHost( hostname: str, ifNumber: int ) -> Dict[str, str]:
 	leerHosts()
@@ -127,3 +131,36 @@ def mostrarHosts() -> List[str]:
 			print(f"{i} -> {h}")
 	
 	return hosts
+
+def ordenarInterfacesPorValor( hostname: str, ifNumber: int, valueOID ):
+	"""Ordena las interfaces obtenidas según el valor que su respectica OID tenga, como por ejemplo la OID de 'InOctets' """
+	comunidad = cfgParser[hostname]["comunidad"]
+	ip = cfgParser[hostname]["ip"]
+	interfaces = {}
+	# Version final
+	for i in range( 1, int(ifNumber) + 1 ):
+		# Si no podemos encontrar el objeto, continuamos al siguiente
+		try:
+			# Buscamos el nombre de la interfáz concatenando el numero i al OID
+			cons = consultaSNMP( comunidad, ip, IF_DESCR_OID+f".{i}")
+		except:
+			continue
+		
+		# Si está en hex, viene de windows, codificado con "windows-1252"
+		if cons.startswith("0x"):
+			ifName = bytes.fromhex(cons[2:]).decode("windows-1252")
+		else:
+			ifName = cons
+
+		try:
+			# Creamos un diccionario a ordenar con el nombre de la interfaz y el valor de la OID respectivo
+			# formato:  ifNumber:ifDescr
+			interfaces[f"{i}:{ifName}"] = int(consultaSNMP( comunidad, ip, valueOID ))
+			# Usamos una lambda para ordenar el diccionario
+			# Ya que items() retorna una lista de tuplas con las llaves en el indice 0 y los valores en el indice 1
+			# obtenemos los valores para ordenarlos. Por eso el índice 1
+			ordered_dict = dict( sorted( interfaces.items(), lambda x: x[1], reverse=True ))
+		except:
+			continue;
+		
+	return ordered_dict;

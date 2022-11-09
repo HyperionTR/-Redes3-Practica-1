@@ -66,19 +66,21 @@ def main():
 			hosts = mostrarHosts()	
 			
 			if len(hosts) != 0:
-				el = input("\nEscribe el índice del host para generar su reporte RRD\n> ")
-				tiempo_inicial = int(input("¿Desde que momento quieres los datos graficados? (en minutos dese ahora)"))
-				tiempo_final = int(input("¿Hasta que momento quieres los datos graficados? (en minutos dese ahora)"))
-				pdf = ReportGenerator()
 				try:
+					el = input("\nEscribe el índice del host para generar su reporte RRD\n> ")
+					tiempo_inicial = int(input("¿Desde que momento quieres los datos graficados? (en minutos dese ahora)\n> "))
+					tiempo_final = int(input("¿Hasta que momento quieres los datos graficados? (en minutos dese ahora)\n> "))
+					pdf = ReportGenerator()
 					createRRD(hosts[int(el)])
-					updateRRD(hosts[int(el)])
+					updateRRD(hosts[int(el)], tiempo_inicial, tiempo_final)
 					graphRRD(hosts[int(el)], tiempo_inicial, tiempo_final)
 					# Generando reporte con las graficas creadas
 					print("Generando reporte...")
 					pdf.reporteRRD( hosts[int(el)] )
 				except IndexError:
 					print(f"\n\x1b[91;1mEl host {el} no existe\x1b[0m")
+				except Exception as ex:
+					print(f"Por favor, ingresa datos válidos... Error: {ex}")
 				finally:
 					del pdf
 		else:
