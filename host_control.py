@@ -5,13 +5,13 @@ from snmp import *
 from typing import Dict, List
 import os
 
-# Directorio de hosts guardados
-hostDir = os.path.dirname( os.path.abspath(__file__) )
+# Directorio pare de los archivos guardados
+scriptParentDir = os.path.dirname( os.path.abspath(__file__) )
 
 # INI config parser
 cfgParser = cfp.ConfigParser()
 # Leer por primera vez los host
-cfgParser.read(f"{hostDir}/hosts.ini")
+cfgParser.read(f"{scriptParentDir}/hosts.ini")
 
 def nuevoHost( comunidad: str, ip: str, puerto: int, version: int ):
 	
@@ -41,9 +41,9 @@ def nuevoHost( comunidad: str, ip: str, puerto: int, version: int ):
 
 		# Creamos el archivo de configuración si no existe
 		try:
-			hosts = open(f"{hostDir}/hosts.ini", "w")
+			hosts = open(f"{scriptParentDir}/hosts.ini", "w")
 		except:
-			hosts = open(f"{hostDir}/hosts.ini", "x")
+			hosts = open(f"{scriptParentDir}/hosts.ini", "x")
 		# Y guardamos elhost neuvo
 		cfgParser.write(hosts)
 		hosts.close()
@@ -52,13 +52,13 @@ def nuevoHost( comunidad: str, ip: str, puerto: int, version: int ):
 
 # Retorna la lista de hosts registrados
 def leerHosts() -> List[str]:
-	cfgParser.read(f"{hostDir}/hosts.ini")
+	cfgParser.read(f"{scriptParentDir}/hosts.ini")
 	return cfgParser.sections()
 
 # Elimina un solo host registrado
 def eliminarHost( hostname: str ):
 	cfgParser.remove_section(hostname)
-	with open(f"{hostDir}/hosts.ini", "w") as h:
+	with open(f"{scriptParentDir}/hosts.ini", "w") as h:
 		cfgParser.write(h)
 
 # Recibe la cadena sysDescr de una consula SNMP y retorna una cadena indicando el SO

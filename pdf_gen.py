@@ -1,4 +1,3 @@
-import imghdr
 from fpdf import *
 from host_control import *
 import os
@@ -11,7 +10,8 @@ WINDOWS7_GREEN = (138, 185, 0)
 LINUX_YELLOW = (222, 178, 2)
 
 class ReportGenerator(FPDF):
-	def reporte( self, hostname: str ):
+	folder = os.path.dirname(os.path.abspath(__file__))
+	def reporteSNMP( self, hostname: str ):
 		# Hacemos una prueba de crear PDF's
 		# Default A4 con unidades mm
 		# Actualizamos la lista de host
@@ -57,8 +57,8 @@ class ReportGenerator(FPDF):
 		# Mostramos la fecha
 		self.text(40, 10, printable_timestamp)
 
-		folder = os.path.dirname(os.path.abspath(__file__))
-		self.image(f"{folder}/images/{hostOS.lower()}.png", 20, 15, 70)
+		# folder = os.path.dirname(os.path.abspath(__file__))
+		self.image(f"{self.folder}/images/{hostOS.lower()}.png", 20, 15, 70)
 
 		self.text( 95, 20+5, "Sistema operativo")
 		
@@ -120,4 +120,33 @@ class ReportGenerator(FPDF):
 			self.line( 30, ifline + 8, 175,ifline + 8)
 			ifline += 20
 
-		self.output(f"{folder}/report/reporte_{hostname}_{readable_timestamp}.pdf")
+		self.output(f"{self.folder}/report/reporte_{hostname}_{readable_timestamp}.pdf")
+	
+	def reporteRRD(self, hostname: str ):
+		# Obtenemos los datos de la fecha actual
+		# print('\n'.join(pytz.country_timezones['mx']))
+		t = date.datetime.now(pytz.timezone("America/Mexico_City"))
+		timestamp = f"{t.year}_{t.month}_{t.day}__{t.hour}_{t.minute}_{t.second}"
+		readable_timestamp = f"el_{t.day}_del_{t.month}_de_{t.year}_a_las_{t.hour}_{t.minute}_{t.second}"
+		printable_timestamp = f"Reporte hecho el {t.day} del {t.month} de {t.year} a las {t.hour}:{t.minute}:{t.second}"
+		
+		# Creamos la nueva página de reportes RRD
+		self.add_page()
+		self.set_font( "Courier", size = 12 )
+		
+		# Linea de en medio
+		self.line(105, 0, 105, 297)
+		# Lineas en tercios del primer medio
+		self.line(0, 99, 105, 99)
+		self.line(0, 198, 105, 198)
+		# Lineas en medios del segundo medio
+		self.line(105, 148, 210, 148)
+
+		self.image(f"{self.folder}/images/{hostname}_unicast.png", 10, 30, 85)
+		self.image(f"{self.folder}/images/{hostname}_ip.png", 10, 30+99, 85)
+		self.image(f"{self.folder}/images/{hostname}_icmp.png", 10, 30+99+99, 85)
+		
+		self.image(f"{self.folder}/images/{hostname}_segmentos.png", 10+105, 50, 85)
+		self.image(f"{self.folder}/images/{hostname}_datagramas.png", 10+105, 50+148, 85)
+
+		self.output(f"{self.folder}/report/RRD_{hostname}_{timestamp}.pdf")

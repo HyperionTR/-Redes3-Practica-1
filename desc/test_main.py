@@ -48,7 +48,7 @@ def main():
 	# print("\n\n")
 
 	pdfgen = ReportGenerator()
-	pdfgen.reporte("einhander")
+	pdfgen.reporteSNMP("einhander")
 
 	# for k, v in naniIf.items():
 	# 	print( f"\x1b[0mIf: {k}" )
