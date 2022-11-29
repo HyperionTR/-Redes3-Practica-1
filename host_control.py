@@ -137,6 +137,7 @@ def ordenarInterfacesPorValor( hostname: str, ifNumber: int, valueOID ):
 	comunidad = cfgParser[hostname]["comunidad"]
 	ip = cfgParser[hostname]["ip"]
 	interfaces = {}
+	ordered_dict = {}
 	# Version final
 	for i in range( 1, int(ifNumber) + 1 ):
 		# Si no podemos encontrar el objeto, continuamos al siguiente
@@ -155,12 +156,13 @@ def ordenarInterfacesPorValor( hostname: str, ifNumber: int, valueOID ):
 		try:
 			# Creamos un diccionario a ordenar con el nombre de la interfaz y el valor de la OID respectivo
 			# formato:  ifNumber:ifDescr
-			interfaces[f"{i}:{ifName}"] = int(consultaSNMP( comunidad, ip, valueOID ))
-			# Usamos una lambda para ordenar el diccionario
-			# Ya que items() retorna una lista de tuplas con las llaves en el indice 0 y los valores en el indice 1
-			# obtenemos los valores para ordenarlos. Por eso el índice 1
-			ordered_dict = dict( sorted( interfaces.items(), lambda x: x[1], reverse=True ))
+			interfaces[f"{i}:{ifName}"] = int(consultaSNMP( comunidad, ip, f"{valueOID}.{i}" ))
 		except:
+			print("xC")
 			continue;
-		
+
+	# Usamos una lambda para ordenar el diccionario
+	# Ya que items() retorna una lista de tuplas con las llaves en el indice 0 y los valores en el indice 1
+	# obtenemos los valores para ordenarlos. Por eso el índice 1
+	ordered_dict = dict( sorted( interfaces.items(), key=lambda x: x[1], reverse=True ))
 	return ordered_dict;

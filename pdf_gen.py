@@ -134,19 +134,18 @@ class ReportGenerator(FPDF):
 		self.add_page()
 		self.set_font( "Courier", size = 12 )
 		
-		# Linea de en medio
-		self.line(105, 0, 105, 297)
-		# Lineas en tercios del primer medio
-		self.line(0, 99, 105, 99)
-		self.line(0, 198, 105, 198)
-		# Lineas en medios del segundo medio
-		self.line(105, 148, 210, 148)
+		self.text(70, 10, "Reporte de gráficas RRD")
+		self.text(40, 20, printable_timestamp)
 
-		self.image(f"{self.folder}/images/{hostname}_unicast.png", 10, 30, 85)
-		self.image(f"{self.folder}/images/{hostname}_ip.png", 10, 30+99, 85)
-		self.image(f"{self.folder}/images/{hostname}_icmp.png", 10, 30+99+99, 85)
+		self.image(f"{self.folder}/images/{hostname}_unicast.png", 30, 30, 150)
+		self.image(f"{self.folder}/images/{hostname}_ip.png", 30, 30+50, 150)
+		self.image(f"{self.folder}/images/{hostname}_icmp.png", 30, 30+50*2, 150)
 		
-		self.image(f"{self.folder}/images/{hostname}_segmentos.png", 10+105, 50, 85)
-		self.image(f"{self.folder}/images/{hostname}_datagramas.png", 10+105, 50+148, 85)
+		self.image(f"{self.folder}/images/{hostname}_segmentos.png", 30, 30+50*3, 150)
+		self.image(f"{self.folder}/images/{hostname}_datagramas.png", 30, 30+50*4, 150)
+
+		self.line(10, 0, 10, 297)
+		self.line(200, 0, 200, 297)
 
 		self.output(f"{self.folder}/report/RRD_{hostname}_{timestamp}.pdf")
+		print("Reporte RRD creado con éxito :D")
