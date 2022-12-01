@@ -12,6 +12,7 @@ IF_ENTRY_OID = "1.3.6.1.2.1.2.2.1"
 IF_INDEX_OID = "1.3.6.1.2.1.2.2.1.1"
 IF_DESCR_OID = "1.3.6.1.2.1.2.2.1.2"
 IF_ADMSTAT_OID = "1.3.6.1.2.1.2.2.1.7"
+
 # Accounting Management OID's
 # Unicast recieved PACKETS
 UNICAST_IF_RECEIVED_OID = "1.3.6.1.2.1.2.2.1.11" # Tabular
@@ -23,6 +24,31 @@ ICMP_OUT_ECHOS_OID = "1.3.6.1.2.1.5.21.0"
 TCP_IN_SEGS_OID = "1.3.6.1.2.1.6.10.0"
 # UDP Sent datagrams
 UDP_OUT_DATAGRAMS_OID = "1.3.6.1.2.1.7.4.0"
+
+# Performance Management OID's
+# CPU Usage OID
+CPU_USAGE_OID = "1.3.6.1.2.1.25.3.3.1.2"
+# Los núcleos del procesador están numerados del 1966_08 al 1966_15 (al menos para los Intel Core i-7)
+INTEL_CPU_CORE_START = "196608"
+# General Storage OID : 1.3.6.1.2.1.25.2.3
+# Table Storage Entry : 1.3.6.1.2.1.25.2.3.1.3
+# HR_STORAGE_TYPE_OID : 1.3.6.1.2.1.25.2.3.1.2
+# HR_ALLOCATION_UNITS_OID : 1.3.6.1.2.1.25.2.3.1.4
+# HR_STORAGE_SIZE_OID : 1.3.6.1.2.1.25.2.3.1.5
+
+# ON LINUX
+HR_STORAGE_DESCR_OID = "1.3.6.1.2.1.25.2.3.1.3" # Description of this Index
+HR_STORAGE_ALLOC_UNITS_OID = "1.3.6.1.2.1.25.2.3.1.4" # Numbres of bytes considered a unit by SNMP
+HR_STORAGE_TOTAL_SIZE_OID = "1.3.6.1.2.1.25.2.3.1.5" # Total size of memory in STORAGE_UNITS
+HR_STORAGE_USAGE_OID = "1.3.6.1.2.1.25.2.3.1.6"
+HR_PHYS_RAM_INDEX = "1"
+HR_SWAP_RAM_INDEX = "10"
+HR_CACHED_RAM_INDEX = "7"
+HR_BUFFERED_RAM_INDEX = "6"
+HR_AVAIL_RAM_INDEX = "11"
+
+
+
 # Inicilaizamos el unico motor SNMPv3
 engine = SnmpEngine()
 

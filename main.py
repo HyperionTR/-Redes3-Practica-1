@@ -10,15 +10,16 @@ inputStr = \
 1 -> Registrar un nuevo Host
 2 -> Eliminar un host registrado
 3 -> Generar un reporte
-4 -> \033[91;1;7mPRUEBA RRD\033[0m
-5 -> Salir
+4 -> Reporte de red RRD
+5 -> \033[93;1;7mMonitoreo de rendimiento de host\033[0m
+6 -> Salir
 			
 > """
 
 def main():
 	print("-*-*-*-*-*- Py Report Generator -*-*-*-*-*-")
 	act = 0
-	while int(act) < 5 and int(act) >= 0:
+	while int(act) < 6 and int(act) >= 0:
 
 		act = input(inputStr)
 
@@ -72,12 +73,12 @@ def main():
 					el = input("\nEscribe el índice del host para generar su reporte RRD\n> ")
 					tiempo_inicial = float(input("¿Desde que momento quieres los datos graficados? (en minutos dese ahora)\n> "))
 					tiempo_final = float(input("¿Hasta que momento quieres los datos graficados? (en minutos dese ahora)\n> "))
-					rrd.createRRD(hosts[int(el)])
-					rrd.updateRRD(hosts[int(el)], tiempo_inicial, tiempo_final)
-					rrd.graphRRD(hosts[int(el)], tiempo_inicial, tiempo_final)
+					rrd.createNetworkRRD(hosts[int(el)])
+					rrd.updateNetworkRRD(hosts[int(el)], tiempo_inicial, tiempo_final)
+					rrd.graphNetworkRRD(hosts[int(el)], tiempo_inicial, tiempo_final)
 					# Generando reporte con las graficas creadas
 					print("Generando reporte...")
-					pdf.reporteRRD( hosts[int(el)] )
+					pdf.reporteRedRRD( hosts[int(el)] )
 				except IndexError as ie:
 					print(f"\n\x1b[91;1mEl host {el} no existe\x1b[0m")
 				except Exception as ex:
@@ -85,6 +86,22 @@ def main():
 				finally:
 					del pdf
 					del rrd
+		elif act == '5':
+			hosts = mostrarHosts()
+			rrd = RRDTools()
+
+			# try:
+			if len(hosts) != 0:
+				el = input("\nEscribe el índice del host para monitorear su rendimiento\n> ")
+				rrd.createPerfRRD(hosts[int(el)])
+				rrd.monitorAndGraphPerf(hosts[int(el)])
+			else:
+				print("\x1b[93;1m¡No hay hosts registrados!\x1b[0m")
+			# except Exception as ex:
+			# 	print(f"Hubo algún error ... {ex}")
+			# finally:
+			# 	del rrd
+			
 		else:
 			print("\x1b[94;1;7m¡Hasta luego!\x1b[0m")
 		print("\n-*-*-*-*-*- -*-*-*-*-*-*-*-+-+- -*-*-*-*-*-")

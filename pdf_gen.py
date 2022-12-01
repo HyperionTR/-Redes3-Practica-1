@@ -122,7 +122,7 @@ class ReportGenerator(FPDF):
 
 		self.output(f"{self.folder}/report/reporte_{hostname}_{readable_timestamp}.pdf")
 	
-	def reporteRRD(self, hostname: str ):
+	def reporteRedRRD(self, hostname: str ):
 		# Obtenemos los datos de la fecha actual
 		# print('\n'.join(pytz.country_timezones['mx']))
 		t = date.datetime.now(pytz.timezone("America/Mexico_City"))

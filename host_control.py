@@ -55,6 +55,16 @@ def leerHosts() -> List[str]:
 	cfgParser.read(f"{scriptParentDir}/hosts.ini")
 	return cfgParser.sections()
 
+def obtenerDatosHost( hostname: str ) -> Dict[str, str]:
+	"""Devuelve un diccionario con los datos del host"""
+	return {
+		"nombre": hostname,
+		"comunidad": cfgParser[hostname]["comunidad"],
+		"ip": cfgParser[hostname]["ip"],
+		"puerto": cfgParser[hostname]["puerto"],
+		"version": cfgParser[hostname]["version"]
+	}
+
 # Elimina un solo host registrado
 def eliminarHost( hostname: str ):
 	cfgParser.remove_section(hostname)
