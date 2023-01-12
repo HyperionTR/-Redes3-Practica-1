@@ -2,6 +2,10 @@ from host_control import *
 from snmp import *
 from pdf_gen import *
 from rrd_tools import *
+from rcp import *
+
+"""Hola desde mi compu remota! :D
+"""
 
 inputStr = \
 """
@@ -12,14 +16,15 @@ inputStr = \
 3 -> Generar un reporte
 4 -> Reporte de red RRD
 5 -> \033[93;1;7mMonitoreo de rendimiento de host\033[0m
-6 -> Salir
+6 -> \033[93;1;7mHerramientas de RCP-Live\033[0m
+7 -> Salir
 			
 > """
 
 def main():
-	print("-*-*-*-*-*- Py Report Generator -*-*-*-*-*-")
+	print("\033[1m-*-*-*-*-*- Py Network Admin System -*-*-*-*-*-\033[0m")
 	act = 0
-	while int(act) < 6 and int(act) >= 0:
+	while int(act) < 7 and int(act) >= 0:
 
 		act = input(inputStr)
 
@@ -101,7 +106,21 @@ def main():
 			# 	print(f"Hubo algún error ... {ex}")
 			# finally:
 			# 	del rrd
+		elif act == '6':
 			
+			rcp_obj = None
+
+			gateway = input("¿A que router desear conectarte? (Enter para ninguno)\nGateway IP> ")
+
+			if gateway == "":
+				rcp_obj = RCP()
+			else:
+				login = input("Login > ")
+				password = input("Contraseña > ")
+				rcp_obj = RCP(gateway, login, password)
+
+			rcp_obj.menu()
+
 		else:
 			print("\x1b[94;1;7m¡Hasta luego!\x1b[0m")
 		print("\n-*-*-*-*-*- -*-*-*-*-*-*-*-+-+- -*-*-*-*-*-")

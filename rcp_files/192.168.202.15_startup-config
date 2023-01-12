@@ -1,0 +1,40 @@
+hostname BUENAAAAS
+!
+service telnet
+service http encrypted password PMHHCBHC$bfb86abe4057f338a27fa709151eb1a6
+service ftp
+!
+administrator rcp encrypted password LJWACBYE$GEc5.zidVBOrQfAHgY2A31
+!
+!
+!
+!
+router ospf
+  router-id 192.168.232.9
+  network 192.168.202.0/24 area 0
+  network 192.168.232.0/30 area 0
+  network 192.168.232.8/30 area 0
+!
+interface loopback lo
+  ip address 127.0.0.1/8
+  ip mtu 16436
+!
+interface ethernet eth0
+  ip address 192.168.202.15/24
+  ip mtu 1500
+  no shutdown
+!
+interface ethernet eth1
+  ip address 192.168.232.2/30
+  ip mtu 1500
+  no shutdown
+!
+interface ethernet eth2
+  ip address 192.168.232.9/30
+  ip mtu 1500
+  no shutdown
+!
+interface ethernet eth3
+  ip mtu 1500
+  shutdown
+!
